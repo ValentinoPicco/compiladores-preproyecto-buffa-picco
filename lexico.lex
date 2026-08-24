@@ -7,16 +7,16 @@ letra     [a-zA-Z]
 id     {letra}({letra}|{nro})*
 
 %%
-"int"    { return "int"; }
-"bool"   { return "bool"; }
-"void"   { return "void"; }
-"return"   { return "return"; }
-"main"   { return "main"; }
-"and"   { return "and"; }
-"not"   { return "not"; }
-"or"   { return "or"; }
-"true"   { return "true"; }
-"false"   { return "false"; }
+"int"    { return int; }
+"bool"   { return bool; }
+"void"   { return void; }
+"return"   { return return; }
+"main"   { return main; }
+"and"   { return and; }
+"not"   { return not; }
+"or"   { return or; }
+"true"   { return true; }
+"false"   { return false; }
 ";"   { return ';'; }
 "+"   { return '+'; }
 "("   { return '('; }
