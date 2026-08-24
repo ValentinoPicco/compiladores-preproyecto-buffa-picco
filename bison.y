@@ -1,54 +1,56 @@
 %{
 #include <stdio.h>
-
+extern FILE *yyin;
+int yylex(void);
+void yyerror(const char *s);
 %}
 
 
-%token int bool void
-%token return
-%token main
-%token and not or
-%token true false
-%token id nro
+%token Int Bool Void
+%token Return
+%token Main
+%token And Not Or
+%token True False
+%token Id Nro
 
 %%
 
 P:
-    TRet main '(' ')' '{' D S '}'
+    TRET Main '(' ')' '{' D S '}'
     ;
 
 E:
     E '+' E
     | E '*' E
     | '(' E ')'
-    | nro
-    | not E
-    | E and E
-    | E or E
-    | true
-    | false
-    | id
-    | id '=' E
+    | Nro
+    | Not E
+    | E And E
+    | E Or E
+    | True
+    | False
+    | Id
+    | Id '=' E
     ;
 
 RET:
-    return E 
-    | return
+    Return E 
+    | Return
     ;
 
-TRet:
-    int
-    | bool
-    | void
+TRET:
+    Int
+    | Bool
+    | Void
     ;
 
-TVar: 
-    int
-    | bool
+TVAR: 
+    Int
+    | Bool
     ;
 
 DEC:
-    TVar id
+    TVAR Id
     ;
 
 D:
@@ -64,17 +66,18 @@ S:
 
 %%
 
+void yyerror(const char *s) {
+  fprintf(stderr, "Error sintáctico: %s\n", s);
+}
 
 void main(int argc, char** argv) {
-
   ++argv, --argc;
   if (argc > 0)
     yyin = fopen(argv[0], "r");
   else
     yyin = stdin;
 
-yylex();
-
+yyparse();
 }
 
 int yywrap(void) {

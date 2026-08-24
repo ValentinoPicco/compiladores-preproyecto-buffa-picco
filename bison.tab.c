@@ -70,9 +70,11 @@
 #line 1 "bison.y"
 
 #include <stdio.h>
+extern FILE *yyin;
+int yylex(void);
+void yyerror(const char *s);
 
-
-#line 76 "bison.tab.c"
+#line 78 "bison.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -103,18 +105,18 @@ enum yysymbol_kind_t
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
-  YYSYMBOL_int = 3,                        /* int  */
-  YYSYMBOL_bool = 4,                       /* bool  */
-  YYSYMBOL_void = 5,                       /* void  */
-  YYSYMBOL_return = 6,                     /* return  */
-  YYSYMBOL_main = 7,                       /* main  */
-  YYSYMBOL_and = 8,                        /* and  */
-  YYSYMBOL_not = 9,                        /* not  */
-  YYSYMBOL_or = 10,                        /* or  */
-  YYSYMBOL_true = 11,                      /* true  */
-  YYSYMBOL_false = 12,                     /* false  */
-  YYSYMBOL_id = 13,                        /* id  */
-  YYSYMBOL_nro = 14,                       /* nro  */
+  YYSYMBOL_Int = 3,                        /* Int  */
+  YYSYMBOL_Bool = 4,                       /* Bool  */
+  YYSYMBOL_Void = 5,                       /* Void  */
+  YYSYMBOL_Return = 6,                     /* Return  */
+  YYSYMBOL_Main = 7,                       /* Main  */
+  YYSYMBOL_And = 8,                        /* And  */
+  YYSYMBOL_Not = 9,                        /* Not  */
+  YYSYMBOL_Or = 10,                        /* Or  */
+  YYSYMBOL_True = 11,                      /* True  */
+  YYSYMBOL_False = 12,                     /* False  */
+  YYSYMBOL_Id = 13,                        /* Id  */
+  YYSYMBOL_Nro = 14,                       /* Nro  */
   YYSYMBOL_15_ = 15,                       /* '('  */
   YYSYMBOL_16_ = 16,                       /* ')'  */
   YYSYMBOL_17_ = 17,                       /* '{'  */
@@ -127,8 +129,8 @@ enum yysymbol_kind_t
   YYSYMBOL_P = 24,                         /* P  */
   YYSYMBOL_E = 25,                         /* E  */
   YYSYMBOL_RET = 26,                       /* RET  */
-  YYSYMBOL_TRet = 27,                      /* TRet  */
-  YYSYMBOL_TVar = 28,                      /* TVar  */
+  YYSYMBOL_TRET = 27,                      /* TRET  */
+  YYSYMBOL_TVAR = 28,                      /* TVAR  */
   YYSYMBOL_DEC = 29,                       /* DEC  */
   YYSYMBOL_D = 30,                         /* D  */
   YYSYMBOL_S = 31                          /* S  */
@@ -518,9 +520,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    17,    17,    21,    22,    23,    24,    25,    26,    27,
-      28,    29,    30,    31,    35,    36,    40,    41,    42,    46,
-      47,    51,    55,    56,    60,    61,    62
+       0,    19,    19,    23,    24,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,    37,    38,    42,    43,    44,    48,
+      49,    53,    57,    58,    62,    63,    64
 };
 #endif
 
@@ -536,10 +538,10 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "int", "bool", "void",
-  "return", "main", "and", "not", "or", "true", "false", "id", "nro",
+  "\"end of file\"", "error", "\"invalid token\"", "Int", "Bool", "Void",
+  "Return", "Main", "And", "Not", "Or", "True", "False", "Id", "Nro",
   "'('", "')'", "'{'", "'}'", "'+'", "'*'", "'='", "';'", "$accept", "P",
-  "E", "RET", "TRet", "TVar", "DEC", "D", "S", YY_NULLPTR
+  "E", "RET", "TRET", "TVAR", "DEC", "D", "S", YY_NULLPTR
 };
 
 static const char *
@@ -1105,7 +1107,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1109 "bison.tab.c"
+#line 1111 "bison.tab.c"
 
       default: break;
     }
@@ -1298,20 +1300,21 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 65 "bison.y"
+#line 67 "bison.y"
 
 
+void yyerror(const char *s) {
+  fprintf(stderr, "Error sintáctico: %s\n", s);
+}
 
 void main(int argc, char** argv) {
-
   ++argv, --argc;
   if (argc > 0)
     yyin = fopen(argv[0], "r");
   else
     yyin = stdin;
 
-yylex();
-
+yyparse();
 }
 
 int yywrap(void) {

@@ -484,8 +484,9 @@ char *yytext;
 #line 1 "lexico.lex"
 #line 2 "lexico.lex"
 #include <stdio.h>
-#line 487 "lex.yy.c"
+#include "bison.tab.h"
 #line 488 "lex.yy.c"
+#line 489 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -702,9 +703,9 @@ YY_DECL
 		}
 
 	{
-#line 9 "lexico.lex"
+#line 10 "lexico.lex"
 
-#line 707 "lex.yy.c"
+#line 708 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -763,116 +764,116 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 10 "lexico.lex"
-{ printf("Palabra reservada: int"); }
+#line 11 "lexico.lex"
+{ return Int; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 11 "lexico.lex"
-{ printf("Palabra reservada: bool"); }
+#line 12 "lexico.lex"
+{ return Bool; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 12 "lexico.lex"
-{ printf("Palabra reservada: void"); }
+#line 13 "lexico.lex"
+{ return Void; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 13 "lexico.lex"
-{ printf("Palabra reservada: return"); }
+#line 14 "lexico.lex"
+{ return Return; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 14 "lexico.lex"
-{ printf("Palabra reservada: main"); }
+#line 15 "lexico.lex"
+{ return Main; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 15 "lexico.lex"
-{ printf("Palabra reservada: and"); }
+#line 16 "lexico.lex"
+{ return And; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 16 "lexico.lex"
-{ printf("Palabra reservada: not"); }
+#line 17 "lexico.lex"
+{ return Not; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 17 "lexico.lex"
-{ printf("Palabra reservada: or"); }
+#line 18 "lexico.lex"
+{ return Or; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 18 "lexico.lex"
-{ printf("Palabra reservada: true"); }
+#line 19 "lexico.lex"
+{ return True; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 19 "lexico.lex"
-{ printf("Palabra reservada: false"); }
+#line 20 "lexico.lex"
+{ return False; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 20 "lexico.lex"
-{ printf("Palabra reservada: ;"); }
+#line 21 "lexico.lex"
+{ return ';'; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 21 "lexico.lex"
-{ printf("Palabra reservada: +"); }
+#line 22 "lexico.lex"
+{ return '+'; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 22 "lexico.lex"
-{ printf("Palabra reservada: ("); }
+#line 23 "lexico.lex"
+{ return '('; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 23 "lexico.lex"
-{ printf("Palabra reservada: )"); }
+#line 24 "lexico.lex"
+{ return ')'; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 24 "lexico.lex"
-{ printf("Palabra reservada: }"); }
+#line 25 "lexico.lex"
+{ return '}'; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 25 "lexico.lex"
-{ printf("Palabra reservada: {"); }
+#line 26 "lexico.lex"
+{ return '{'; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 26 "lexico.lex"
-{ printf("Palabra reservada: ="); }
+#line 27 "lexico.lex"
+{ return '='; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 28 "lexico.lex"
-{ printf("Identificador: %s\n", yytext); }
+#line 29 "lexico.lex"
+{ return Id; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 29 "lexico.lex"
-{ printf("Número entero: %s\n", yytext); }
+#line 30 "lexico.lex"
+{ return Nro; }
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 30 "lexico.lex"
+#line 31 "lexico.lex"
 ; /* Ignorar espacios en blanco y saltos de línea */
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 31 "lexico.lex"
+#line 32 "lexico.lex"
 { printf("Caracter desconocido: %s\n", yytext); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 32 "lexico.lex"
+#line 33 "lexico.lex"
 ECHO;
 	YY_BREAK
-#line 875 "lex.yy.c"
+#line 876 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1877,21 +1878,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 32 "lexico.lex"
+#line 33 "lexico.lex"
 
-void main(int argc, char** argv) {
-
-  ++argv, --argc;
-  if (argc > 0)
-    yyin = fopen(argv[0], "r");
-  else
-    yyin = stdin;
-
-yylex();
-
-}
-
-int yywrap(void) {
-  return 1;
-}
 
