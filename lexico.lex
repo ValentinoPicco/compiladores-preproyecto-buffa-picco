@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include 'bison.tab.h'
 %}
 
 nro    [0-9]+
