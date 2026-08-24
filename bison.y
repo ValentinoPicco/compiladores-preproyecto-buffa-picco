@@ -3,7 +3,6 @@
 
 %}
 
-%%
 
 %token int bool void
 %token return
@@ -29,7 +28,7 @@ E:
     | true
     | false
     | id
-    | id '=' Error
+    | id '=' E
     ;
 
 RET:
