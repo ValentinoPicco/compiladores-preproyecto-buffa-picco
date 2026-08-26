@@ -5,12 +5,12 @@ int yylex(void);
 void yyerror(const char *s);
 %}
 
-%left '='
+%right '='
 %left Or
 %left And
-%left Not
 %left '+'
 %left '*'
+%right Not
 
 %token Int Bool Void
 %token Return
