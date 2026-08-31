@@ -3,6 +3,8 @@
 #include "bison.tab.h"
 %}
 
+%option yylineno
+
 nro    [0-9]+
 letra     [a-zA-Z]
 id     {letra}({letra}|{nro})*
@@ -28,6 +30,6 @@ id     {letra}({letra}|{nro})*
 
 {id}       { return Id; }
 {nro}     { return Nro; }
-[ \t\n]+      ; /* Ignorar espacios en blanco y saltos de línea */
-.             { printf("Caracter desconocido: %s\n", yytext); }
+[ \t\n]+      ; /* Ignorar espacios en blanco y saltos de linea */
+.             ;
 %%

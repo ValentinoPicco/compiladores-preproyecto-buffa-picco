@@ -3,7 +3,10 @@
 extern FILE *yyin;
 int yylex(void);
 void yyerror(const char *s);
+extern int yylineno; 
 %}
+
+%define parse.error verbose
 
 %right '='
 %left Or
@@ -73,7 +76,7 @@ S:
 %%
 
 void yyerror(const char *s) {
-  fprintf(stderr, "Error sintáctico: %s\n", s);
+  fprintf(stderr, "Error en la línea %d: %s\n", yylineno, s); 
 }
 
 void main(int argc, char** argv) {
