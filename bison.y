@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
 extern FILE *yyin;
 int yylex(void);
 void yyerror(const char *s);
@@ -184,7 +185,7 @@ S:
     {
         $$ = crearNodo("S", NULL, $1, $2);
     }
-    
+
     |
     {
         $$ = NULL;
@@ -211,4 +212,15 @@ int yywrap(void) {
   return 1;
 }
 
+Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der)
+{
+    Nodo *n = malloc(sizeof(Nodo));
+
+    n->tipo = tipo;
+    n->valor = valor;
+    n->izq = izq;
+    n->der = der;
+
+    return n;
+}
 
