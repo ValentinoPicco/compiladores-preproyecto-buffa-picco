@@ -21,7 +21,7 @@ typedef struct Nodo {
     struct Nodo *der;
 } Nodo;
 
-
+Nodo *raiz = NULL;
 Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der);
 %}
 
@@ -54,6 +54,7 @@ P:
     {
         Nodo *bloque = crearNodo("bloque", NULL, $6, $7);
         $$ = crearNodo("prog", NULL, $1, bloque);
+        raiz = $$;
     }
 
     ;
@@ -206,6 +207,23 @@ void yyerror(const char *s) {
   fprintf(stderr, "Error en la línea %d: %s\n", yylineno, s); 
 }
 
+void imprimirAST(Nodo *n, int nivel) {
+    if (n == NULL) return;
+
+    for (int i = 0; i < nivel; i++) {
+        printf("  ");
+    }
+
+    if (n->info->valor != NULL) {
+        printf("- %s (%s)\n", n->info->tipo, n->info->valor);
+    } else {
+        printf("- %s\n", n->info->tipo);
+    }
+
+    imprimirAST(n->izq, nivel + 1);
+    imprimirAST(n->der, nivel + 1);
+}
+
 void main(int argc, char** argv) {
   ++argv, --argc;
   if (argc > 0)
@@ -213,7 +231,10 @@ void main(int argc, char** argv) {
   else
     yyin = stdin;
 
-yyparse();
+  yyparse();
+  
+  printf("\n--- Árbol Sintáctico Abstracto (AST) ---\n");
+  imprimirAST(raiz, 0);
 }
 
 int yywrap(void) {

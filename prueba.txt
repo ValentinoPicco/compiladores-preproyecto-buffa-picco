@@ -1,6 +1,6 @@
 void main() {
-    bool b
+    bool b;
     b = false;
 
     return b;
-  }
+}
