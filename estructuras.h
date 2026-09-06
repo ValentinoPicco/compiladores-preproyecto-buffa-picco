@@ -7,7 +7,7 @@ typedef enum TipoNodo {
 } TipoNodo;
 
 typedef enum TipoDato {
-    TIPO_INT, TIPO_BOOL, TIPO_VOID
+    TIPO_INT, TIPO_BOOL, TIPO_VOID, TIPO_NONE
 } TipoDato;
 
 typedef struct InfoNodo {
