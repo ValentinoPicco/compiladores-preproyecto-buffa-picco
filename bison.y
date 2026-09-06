@@ -6,9 +6,17 @@ int yylex(void);
 void yyerror(const char *s);
 extern int yylineno; 
 
-typedef struct Nodo {
+typedef struct InfoNodo {
     char *tipo;
     char *valor;
+    int linea;
+    int tipo_dato;
+    char *nombre;
+    void *simbolo;
+} InfoNodo;
+
+typedef struct Nodo {
+    struct InfoNodo *info;
     struct Nodo *izq;
     struct Nodo *der;
 } Nodo;
@@ -220,6 +228,12 @@ Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der)
     n->valor = valor;
     n->izq = izq;
     n->der = der;
+
+    n->info = malloc(sizeof(InfoNodo));
+    n->info->linea = yylineno;
+    n->info->tipo_dato = -1;
+    n->info->nombre = NULL;
+    n->info->simbolo = NULL;
 
     return n;
 }

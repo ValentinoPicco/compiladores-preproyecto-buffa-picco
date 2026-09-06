@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <string.h>
 #include "bison.tab.h"
 %}
 
@@ -28,8 +29,8 @@ id     {letra}({letra}|{nro})*
 "{"   { return '{'; }
 "="   { return '='; }
 
-{id}       { return Id; }
-{nro}     { return Nro; }
+{id}       { yyval.texto = strdup(yytext); return Id; }
+{nro}     { yyval.texto = strdup(yytext); return Nro; }
 [ \t\n]+      ; /* Ignorar espacios en blanco y saltos de linea */
 .             ;
 %%
