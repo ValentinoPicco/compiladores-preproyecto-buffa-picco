@@ -215,9 +215,9 @@ void imprimirAST(Nodo *n, int nivel) {
     }
 
     if (n->info->valor != NULL) {
-        printf("- %s (%s)\n", n->info->tipo, n->info->valor);
+        printf("- %s (%s) [Línea %d]\n", n->info->tipo, n->info->valor, n->info->linea);
     } else {
-        printf("- %s\n", n->info->tipo);
+        printf("- %s [Línea %d]\n", n->info->tipo, n->info->linea);
     }
 
     imprimirAST(n->izq, nivel + 1);
