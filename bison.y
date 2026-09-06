@@ -39,7 +39,9 @@ P:
     TRET Main '(' ')' '{' D S '}'
     {
         Nodo *bloque = crearNodo(BLOQUE, NULL, $6, $7);
+        bloque->info->linea = $1->info->linea; // Que el bloque herede la misma línea
         $$ = crearNodo(PROG, NULL, $1, bloque);
+        $$->info->linea = $1->info->linea;
         raiz = $$;
     }
 
