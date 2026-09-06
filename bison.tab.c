@@ -1848,6 +1848,9 @@ void main(int argc, char** argv) {
   
   printf("\n--- Árbol Sintáctico Abstracto (AST) ---\n");
   imprimirAST(raiz, 0);
+
+  printf("\n--- Ejecutando el programa ---\n");
+  evaluarAST(raiz);
 }
 
 int yywrap(void) {

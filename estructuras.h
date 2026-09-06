@@ -28,4 +28,13 @@ typedef struct Nodo {
 Nodo *crearNodo(TipoNodo tipo, char *valor, Nodo *izq, Nodo *der);
 const char* tipoToString(TipoNodo t);
 
+typedef struct Simbolo {
+  char *nombre;
+  TipoDato tipo;
+  int valor;
+  struct Simbolo *sig;
+} Simbolo;
+
+int evaluarAST(Nodo *n);
+
 #endif
