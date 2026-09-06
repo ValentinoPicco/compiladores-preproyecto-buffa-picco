@@ -1,28 +1,14 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "estructuras.h"
 extern FILE *yyin;
 int yylex(void);
 void yyerror(const char *s);
 extern int yylineno; 
 
-typedef struct InfoNodo {
-    char *tipo;
-    char *valor;
-    int linea;
-    int tipo_dato;
-    char *nombre;
-    void *simbolo;
-} InfoNodo;
-
-typedef struct Nodo {
-    struct InfoNodo *info;
-    struct Nodo *izq;
-    struct Nodo *der;
-} Nodo;
-
 Nodo *raiz = NULL;
-Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der);
+
 %}
 
 %union {
@@ -52,8 +38,8 @@ Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der);
 P:
     TRET Main '(' ')' '{' D S '}'
     {
-        Nodo *bloque = crearNodo("bloque", NULL, $6, $7);
-        $$ = crearNodo("prog", NULL, $1, bloque);
+        Nodo *bloque = crearNodo(BLOQUE, NULL, $6, $7);
+        $$ = crearNodo(PROG, NULL, $1, bloque);
         raiz = $$;
     }
 
@@ -62,12 +48,12 @@ P:
 E:
     E '+' E
     {
-        $$ = crearNodo("+", NULL, $1, $3);
+        $$ = crearNodo(SUMA, NULL, $1, $3);
     }
 
     | E '*' E
     {
-        $$ = crearNodo("*", NULL, $1, $3);
+        $$ = crearNodo(MULT, NULL, $1, $3);
     }
 
     | '(' E ')'
@@ -77,43 +63,43 @@ E:
 
     | Nro
     {
-        $$ = crearNodo("nro", $1, NULL, NULL);
+        $$ = crearNodo(NRO, $1, NULL, NULL);
     }
 
     | Not E
     {
-        $$ = crearNodo("not", NULL, $2, NULL);
+        $$ = crearNodo(NOT, NULL, $2, NULL);
     }
 
     | E And E
     {
-        $$ = crearNodo("and", NULL, $1, $3);
+        $$ = crearNodo(AND, NULL, $1, $3);
     }
 
     | E Or E
     {
-        $$ = crearNodo("or", NULL, $1, $3);
+        $$ = crearNodo(OR, NULL, $1, $3);
     }
 
     | True
     {
-        $$ = crearNodo("true", NULL, NULL, NULL);
+        $$ = crearNodo(TRUE, NULL, NULL, NULL);
     }
 
     | False
     {
-        $$ = crearNodo("false", NULL, NULL, NULL);
+        $$ = crearNodo(FALSE, NULL, NULL, NULL);
     }
 
     | Id
     {
-        $$ = crearNodo("id", $1, NULL, NULL);
+        $$ = crearNodo(ID, $1, NULL, NULL);
     }
 
     | Id '=' E
     {
-        Nodo *id = crearNodo("id", $1, NULL, NULL);
-        $$ = crearNodo("=", NULL, id, $3);
+        Nodo *id = crearNodo(ID, $1, NULL, NULL);
+        $$ = crearNodo(ASIG, NULL, id, $3);
     }
 
     ;
@@ -121,12 +107,12 @@ E:
 RET:
     Return E 
     {
-        $$ = crearNodo("return", NULL, $2, NULL);
+        $$ = crearNodo(RETURN, NULL, $2, NULL);
     }
 
     | Return
     {
-        $$ = crearNodo("return", NULL, NULL, NULL);
+        $$ = crearNodo(RETURN, NULL, NULL, NULL);
     }
 
     ;
@@ -134,17 +120,17 @@ RET:
 TRET:
     Int
     {
-        $$ = crearNodo("int", NULL, NULL, NULL);
+        $$ = crearNodo(INT, NULL, NULL, NULL);
     }
 
     | Bool
     {
-        $$ = crearNodo("bool", NULL, NULL, NULL);
+        $$ = crearNodo(BOOL, NULL, NULL, NULL);
     }
 
     | Void
     { 
-        $$ = crearNodo("void", NULL, NULL, NULL);
+        $$ = crearNodo(VOID, NULL, NULL, NULL);
     }
 
     ;
@@ -152,12 +138,12 @@ TRET:
 TVAR: 
     Int
     {
-        $$ = crearNodo("int", NULL, NULL, NULL);
+        $$ = crearNodo(INT, NULL, NULL, NULL);
     }
 
     | Bool
     {
-        $$ = crearNodo("bool", NULL, NULL, NULL);
+        $$ = crearNodo(BOOL, NULL, NULL, NULL);
     }
 
     ;
@@ -165,8 +151,8 @@ TVAR:
 DEC:
     TVAR Id
     {   
-        Nodo *id = crearNodo("id", $2, NULL, NULL);
-        $$ = crearNodo("decl", NULL, $1, id);
+        Nodo *id = crearNodo(ID, $2, NULL, NULL);
+        $$ = crearNodo(DECL, NULL, $1, id);
     }
 
     ;
@@ -174,7 +160,7 @@ DEC:
 D:
     D DEC ';'
     {
-        $$ = crearNodo("D", NULL, $1, $2);
+        $$ = crearNodo(D, NULL, $1, $2);
     }
 
     | 
@@ -187,12 +173,12 @@ D:
 S:
     S E ';'
     {
-        $$ = crearNodo("S", NULL, $1, $2);
+        $$ = crearNodo(S, NULL, $1, $2);
     }
 
     | S RET ';'
     {
-        $$ = crearNodo("S", NULL, $1, $2);
+        $$ = crearNodo(S, NULL, $1, $2);
     }
 
     |
@@ -215,9 +201,9 @@ void imprimirAST(Nodo *n, int nivel) {
     }
 
     if (n->info->valor != NULL) {
-        printf("- %s (%s) [Línea %d]\n", n->info->tipo, n->info->valor, n->info->linea);
+        printf("- %s (%s) [Línea %d]\n", tipoToString(n->info->tipo), n->info->valor, n->info->linea);
     } else {
-        printf("- %s [Línea %d]\n", n->info->tipo, n->info->linea);
+        printf("- %s [Línea %d]\n", tipoToString(n->info->tipo), n->info->linea);
     }
 
     imprimirAST(n->izq, nivel + 1);
@@ -239,23 +225,5 @@ void main(int argc, char** argv) {
 
 int yywrap(void) {
   return 1;
-}
-
-Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der)
-{
-    Nodo *n = malloc(sizeof(Nodo));
-    n->info = malloc(sizeof(InfoNodo));
-
-    n->info->tipo = tipo;
-    n->info->valor = valor;
-    n->info->linea = yylineno;
-    n->info->tipo_dato = -1;
-    n->info->nombre = NULL;
-    n->info->simbolo = NULL;
-
-    n->izq = izq;
-    n->der = der;
-
-    return n;
 }
 

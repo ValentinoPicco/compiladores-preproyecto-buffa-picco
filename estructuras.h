@@ -7,7 +7,7 @@ typedef enum TipoNodo {
 } TipoNodo;
 
 typedef enum TipoDato {
-    INT, BOOL, VOID
+    TIPO_INT, TIPO_BOOL, TIPO_VOID
 } TipoDato;
 
 typedef struct InfoNodo {
@@ -26,5 +26,6 @@ typedef struct Nodo {
 } Nodo;
 
 Nodo *crearNodo(TipoNodo tipo, char *valor, Nodo *izq, Nodo *der);
+const char* tipoToString(TipoNodo t);
 
 #endif

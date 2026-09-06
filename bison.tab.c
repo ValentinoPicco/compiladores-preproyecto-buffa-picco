@@ -71,30 +71,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "estructuras.h"
 extern FILE *yyin;
 int yylex(void);
 void yyerror(const char *s);
 extern int yylineno; 
 
-typedef struct InfoNodo {
-    char *tipo;
-    char *valor;
-    int linea;
-    int tipo_dato;
-    char *nombre;
-    void *simbolo;
-} InfoNodo;
-
-typedef struct Nodo {
-    struct InfoNodo *info;
-    struct Nodo *izq;
-    struct Nodo *der;
-} Nodo;
-
 Nodo *raiz = NULL;
-Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der);
 
-#line 98 "bison.tab.c"
+
+#line 84 "bison.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -540,9 +526,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    53,    53,    63,    68,    73,    78,    83,    88,    93,
-      98,   103,   108,   113,   122,   127,   135,   140,   145,   153,
-     158,   166,   175,   181,   188,   193,   199
+       0,    39,    39,    49,    54,    59,    64,    69,    74,    79,
+      84,    89,    94,    99,   108,   113,   121,   126,   131,   139,
+     144,   152,   161,   167,   174,   179,   185
 };
 #endif
 
@@ -1397,211 +1383,211 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* P: TRET Main '(' ')' '{' D S '}'  */
-#line 54 "bison.y"
+#line 40 "bison.y"
     {
-        Nodo *bloque = crearNodo("bloque", NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
-        (yyval.nodo) = crearNodo("prog", NULL, (yyvsp[-7].nodo), bloque);
+        Nodo *bloque = crearNodo(BLOQUE, NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
+        (yyval.nodo) = crearNodo(PROG, NULL, (yyvsp[-7].nodo), bloque);
         raiz = (yyval.nodo);
     }
-#line 1407 "bison.tab.c"
+#line 1393 "bison.tab.c"
     break;
 
   case 3: /* E: E '+' E  */
-#line 64 "bison.y"
+#line 50 "bison.y"
     {
-        (yyval.nodo) = crearNodo("+", NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
+        (yyval.nodo) = crearNodo(SUMA, NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
     }
-#line 1415 "bison.tab.c"
+#line 1401 "bison.tab.c"
     break;
 
   case 4: /* E: E '*' E  */
-#line 69 "bison.y"
+#line 55 "bison.y"
     {
-        (yyval.nodo) = crearNodo("*", NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
+        (yyval.nodo) = crearNodo(MULT, NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
     }
-#line 1423 "bison.tab.c"
+#line 1409 "bison.tab.c"
     break;
 
   case 5: /* E: '(' E ')'  */
-#line 74 "bison.y"
+#line 60 "bison.y"
     {
         (yyval.nodo) = (yyvsp[-1].nodo);
     }
-#line 1431 "bison.tab.c"
+#line 1417 "bison.tab.c"
     break;
 
   case 6: /* E: Nro  */
-#line 79 "bison.y"
+#line 65 "bison.y"
     {
-        (yyval.nodo) = crearNodo("nro", (yyvsp[0].texto), NULL, NULL);
+        (yyval.nodo) = crearNodo(NRO, (yyvsp[0].texto), NULL, NULL);
     }
-#line 1439 "bison.tab.c"
+#line 1425 "bison.tab.c"
     break;
 
   case 7: /* E: Not E  */
-#line 84 "bison.y"
+#line 70 "bison.y"
     {
-        (yyval.nodo) = crearNodo("not", NULL, (yyvsp[0].nodo), NULL);
+        (yyval.nodo) = crearNodo(NOT, NULL, (yyvsp[0].nodo), NULL);
     }
-#line 1447 "bison.tab.c"
+#line 1433 "bison.tab.c"
     break;
 
   case 8: /* E: E And E  */
-#line 89 "bison.y"
+#line 75 "bison.y"
     {
-        (yyval.nodo) = crearNodo("and", NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
+        (yyval.nodo) = crearNodo(AND, NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
     }
-#line 1455 "bison.tab.c"
+#line 1441 "bison.tab.c"
     break;
 
   case 9: /* E: E Or E  */
-#line 94 "bison.y"
+#line 80 "bison.y"
     {
-        (yyval.nodo) = crearNodo("or", NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
+        (yyval.nodo) = crearNodo(OR, NULL, (yyvsp[-2].nodo), (yyvsp[0].nodo));
     }
-#line 1463 "bison.tab.c"
+#line 1449 "bison.tab.c"
     break;
 
   case 10: /* E: True  */
-#line 99 "bison.y"
+#line 85 "bison.y"
     {
-        (yyval.nodo) = crearNodo("true", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(TRUE, NULL, NULL, NULL);
     }
-#line 1471 "bison.tab.c"
+#line 1457 "bison.tab.c"
     break;
 
   case 11: /* E: False  */
-#line 104 "bison.y"
+#line 90 "bison.y"
     {
-        (yyval.nodo) = crearNodo("false", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(FALSE, NULL, NULL, NULL);
     }
-#line 1479 "bison.tab.c"
+#line 1465 "bison.tab.c"
     break;
 
   case 12: /* E: Id  */
-#line 109 "bison.y"
+#line 95 "bison.y"
     {
-        (yyval.nodo) = crearNodo("id", (yyvsp[0].texto), NULL, NULL);
+        (yyval.nodo) = crearNodo(ID, (yyvsp[0].texto), NULL, NULL);
     }
-#line 1487 "bison.tab.c"
+#line 1473 "bison.tab.c"
     break;
 
   case 13: /* E: Id '=' E  */
-#line 114 "bison.y"
+#line 100 "bison.y"
     {
-        Nodo *id = crearNodo("id", (yyvsp[-2].texto), NULL, NULL);
-        (yyval.nodo) = crearNodo("=", NULL, id, (yyvsp[0].nodo));
+        Nodo *id = crearNodo(ID, (yyvsp[-2].texto), NULL, NULL);
+        (yyval.nodo) = crearNodo(ASIG, NULL, id, (yyvsp[0].nodo));
     }
-#line 1496 "bison.tab.c"
+#line 1482 "bison.tab.c"
     break;
 
   case 14: /* RET: Return E  */
-#line 123 "bison.y"
+#line 109 "bison.y"
     {
-        (yyval.nodo) = crearNodo("return", NULL, (yyvsp[0].nodo), NULL);
+        (yyval.nodo) = crearNodo(RETURN, NULL, (yyvsp[0].nodo), NULL);
     }
-#line 1504 "bison.tab.c"
+#line 1490 "bison.tab.c"
     break;
 
   case 15: /* RET: Return  */
-#line 128 "bison.y"
+#line 114 "bison.y"
     {
-        (yyval.nodo) = crearNodo("return", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(RETURN, NULL, NULL, NULL);
     }
-#line 1512 "bison.tab.c"
+#line 1498 "bison.tab.c"
     break;
 
   case 16: /* TRET: Int  */
-#line 136 "bison.y"
+#line 122 "bison.y"
     {
-        (yyval.nodo) = crearNodo("int", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(INT, NULL, NULL, NULL);
     }
-#line 1520 "bison.tab.c"
+#line 1506 "bison.tab.c"
     break;
 
   case 17: /* TRET: Bool  */
-#line 141 "bison.y"
+#line 127 "bison.y"
     {
-        (yyval.nodo) = crearNodo("bool", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(BOOL, NULL, NULL, NULL);
     }
-#line 1528 "bison.tab.c"
+#line 1514 "bison.tab.c"
     break;
 
   case 18: /* TRET: Void  */
-#line 146 "bison.y"
+#line 132 "bison.y"
     { 
-        (yyval.nodo) = crearNodo("void", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(VOID, NULL, NULL, NULL);
     }
-#line 1536 "bison.tab.c"
+#line 1522 "bison.tab.c"
     break;
 
   case 19: /* TVAR: Int  */
-#line 154 "bison.y"
+#line 140 "bison.y"
     {
-        (yyval.nodo) = crearNodo("int", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(INT, NULL, NULL, NULL);
     }
-#line 1544 "bison.tab.c"
+#line 1530 "bison.tab.c"
     break;
 
   case 20: /* TVAR: Bool  */
-#line 159 "bison.y"
+#line 145 "bison.y"
     {
-        (yyval.nodo) = crearNodo("bool", NULL, NULL, NULL);
+        (yyval.nodo) = crearNodo(BOOL, NULL, NULL, NULL);
     }
-#line 1552 "bison.tab.c"
+#line 1538 "bison.tab.c"
     break;
 
   case 21: /* DEC: TVAR Id  */
-#line 167 "bison.y"
+#line 153 "bison.y"
     {   
-        Nodo *id = crearNodo("id", (yyvsp[0].texto), NULL, NULL);
-        (yyval.nodo) = crearNodo("decl", NULL, (yyvsp[-1].nodo), id);
+        Nodo *id = crearNodo(ID, (yyvsp[0].texto), NULL, NULL);
+        (yyval.nodo) = crearNodo(DECL, NULL, (yyvsp[-1].nodo), id);
     }
-#line 1561 "bison.tab.c"
+#line 1547 "bison.tab.c"
     break;
 
   case 22: /* D: D DEC ';'  */
-#line 176 "bison.y"
+#line 162 "bison.y"
     {
-        (yyval.nodo) = crearNodo("D", NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
+        (yyval.nodo) = crearNodo(D, NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
     }
-#line 1569 "bison.tab.c"
+#line 1555 "bison.tab.c"
     break;
 
   case 23: /* D: %empty  */
-#line 181 "bison.y"
+#line 167 "bison.y"
     {
         (yyval.nodo) = NULL;
     }
-#line 1577 "bison.tab.c"
+#line 1563 "bison.tab.c"
     break;
 
   case 24: /* S: S E ';'  */
-#line 189 "bison.y"
+#line 175 "bison.y"
     {
-        (yyval.nodo) = crearNodo("S", NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
+        (yyval.nodo) = crearNodo(S, NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
     }
-#line 1585 "bison.tab.c"
+#line 1571 "bison.tab.c"
     break;
 
   case 25: /* S: S RET ';'  */
-#line 194 "bison.y"
+#line 180 "bison.y"
     {
-        (yyval.nodo) = crearNodo("S", NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
+        (yyval.nodo) = crearNodo(S, NULL, (yyvsp[-2].nodo), (yyvsp[-1].nodo));
     }
-#line 1593 "bison.tab.c"
+#line 1579 "bison.tab.c"
     break;
 
   case 26: /* S: %empty  */
-#line 199 "bison.y"
+#line 185 "bison.y"
     {
         (yyval.nodo) = NULL;
     }
-#line 1601 "bison.tab.c"
+#line 1587 "bison.tab.c"
     break;
 
 
-#line 1605 "bison.tab.c"
+#line 1591 "bison.tab.c"
 
       default: break;
     }
@@ -1825,7 +1811,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 204 "bison.y"
+#line 190 "bison.y"
 
 
 void yyerror(const char *s) {
@@ -1840,9 +1826,9 @@ void imprimirAST(Nodo *n, int nivel) {
     }
 
     if (n->info->valor != NULL) {
-        printf("- %s (%s) [Línea %d]\n", n->info->tipo, n->info->valor, n->info->linea);
+        printf("- %s (%s) [Línea %d]\n", tipoToString(n->info->tipo), n->info->valor, n->info->linea);
     } else {
-        printf("- %s [Línea %d]\n", n->info->tipo, n->info->linea);
+        printf("- %s [Línea %d]\n", tipoToString(n->info->tipo), n->info->linea);
     }
 
     imprimirAST(n->izq, nivel + 1);
@@ -1864,23 +1850,5 @@ void main(int argc, char** argv) {
 
 int yywrap(void) {
   return 1;
-}
-
-Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der)
-{
-    Nodo *n = malloc(sizeof(Nodo));
-    n->info = malloc(sizeof(InfoNodo));
-
-    n->info->tipo = tipo;
-    n->info->valor = valor;
-    n->info->linea = yylineno;
-    n->info->tipo_dato = -1;
-    n->info->nombre = NULL;
-    n->info->simbolo = NULL;
-
-    n->izq = izq;
-    n->der = der;
-
-    return n;
 }
 
