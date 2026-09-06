@@ -29,8 +29,8 @@ id     {letra}({letra}|{nro})*
 "{"   { return '{'; }
 "="   { return '='; }
 
-{id}       { yyval.texto = strdup(yytext); return Id; }
-{nro}     { yyval.texto = strdup(yytext); return Nro; }
+{id}       { yylval.texto = strdup(yytext); return Id; }
+{nro}     { yylval.texto = strdup(yytext); return Nro; }
 [ \t\n]+      ; /* Ignorar espacios en blanco y saltos de linea */
 .             ;
 %%

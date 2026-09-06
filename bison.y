@@ -26,7 +26,7 @@ Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der);
 %}
 
 %union {
-    Nodo *nodo;
+    struct Nodo *nodo;
     char *texto;
 }
 
@@ -223,17 +223,17 @@ int yywrap(void) {
 Nodo *crearNodo(char *tipo, char *valor, Nodo *izq, Nodo *der)
 {
     Nodo *n = malloc(sizeof(Nodo));
-
-    n->tipo = tipo;
-    n->valor = valor;
-    n->izq = izq;
-    n->der = der;
-
     n->info = malloc(sizeof(InfoNodo));
+
+    n->info->tipo = tipo;
+    n->info->valor = valor;
     n->info->linea = yylineno;
     n->info->tipo_dato = -1;
     n->info->nombre = NULL;
     n->info->simbolo = NULL;
+
+    n->izq = izq;
+    n->der = der;
 
     return n;
 }

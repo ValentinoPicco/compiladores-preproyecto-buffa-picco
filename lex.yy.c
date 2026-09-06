@@ -509,9 +509,10 @@ char *yytext;
 #line 1 "lexico.lex"
 #line 2 "lexico.lex"
 #include <stdio.h>
+#include <string.h>
 #include "bison.tab.h"
-#line 513 "lex.yy.c"
 #line 514 "lex.yy.c"
+#line 515 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -728,9 +729,9 @@ YY_DECL
 		}
 
 	{
-#line 12 "lexico.lex"
+#line 13 "lexico.lex"
 
-#line 733 "lex.yy.c"
+#line 734 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -799,116 +800,116 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 13 "lexico.lex"
+#line 14 "lexico.lex"
 { return Int; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 14 "lexico.lex"
+#line 15 "lexico.lex"
 { return Bool; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 15 "lexico.lex"
+#line 16 "lexico.lex"
 { return Void; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 16 "lexico.lex"
+#line 17 "lexico.lex"
 { return Return; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 17 "lexico.lex"
+#line 18 "lexico.lex"
 { return Main; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 18 "lexico.lex"
+#line 19 "lexico.lex"
 { return And; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 19 "lexico.lex"
+#line 20 "lexico.lex"
 { return Not; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 20 "lexico.lex"
+#line 21 "lexico.lex"
 { return Or; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 21 "lexico.lex"
+#line 22 "lexico.lex"
 { return True; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "lexico.lex"
+#line 23 "lexico.lex"
 { return False; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 23 "lexico.lex"
+#line 24 "lexico.lex"
 { return ';'; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 24 "lexico.lex"
+#line 25 "lexico.lex"
 { return '+'; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 25 "lexico.lex"
+#line 26 "lexico.lex"
 { return '('; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 26 "lexico.lex"
+#line 27 "lexico.lex"
 { return ')'; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 27 "lexico.lex"
+#line 28 "lexico.lex"
 { return '}'; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 28 "lexico.lex"
+#line 29 "lexico.lex"
 { return '{'; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 29 "lexico.lex"
+#line 30 "lexico.lex"
 { return '='; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 31 "lexico.lex"
-{ return Id; }
+#line 32 "lexico.lex"
+{ yylval.texto = strdup(yytext); return Id; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 32 "lexico.lex"
-{ return Nro; }
+#line 33 "lexico.lex"
+{ yylval.texto = strdup(yytext); return Nro; }
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 33 "lexico.lex"
+#line 34 "lexico.lex"
 ; /* Ignorar espacios en blanco y saltos de linea */
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 34 "lexico.lex"
+#line 35 "lexico.lex"
 ;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 35 "lexico.lex"
+#line 36 "lexico.lex"
 ECHO;
 	YY_BREAK
-#line 911 "lex.yy.c"
+#line 912 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1925,6 +1926,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 35 "lexico.lex"
+#line 36 "lexico.lex"
 
 
