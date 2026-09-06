@@ -16,7 +16,7 @@ Nodo *crearNodo(TipoNodo tipo, char *valor, Nodo *izq, Nodo *der)
     n->info->tipo = tipo;
     n->info->valor = valor;
     n->info->linea = yylineno;
-    n->info->tipo_dato = TIPO_VOID;
+    n->info->tipo_dato = TIPO_NONE;
     n->info->nombre = NULL;
     n->info->simbolo = NULL;
 
