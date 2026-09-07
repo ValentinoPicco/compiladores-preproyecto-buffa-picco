@@ -101,36 +101,84 @@ int evaluarAST(Nodo *n) {
             return 0;
         }
         
-        case SUMA:
-            return evaluarAST(n->izq) + evaluarAST(n->der);
+        case SUMA: {
+            int val_izq = evaluarAST(n->izq);
+            int val_der = evaluarAST(n->der);
             
-        case MULT:
-            return evaluarAST(n->izq) * evaluarAST(n->der);
+            if (n->izq->info->tipo_dato != TIPO_INT || n->der->info->tipo_dato != TIPO_INT){
+              printf("Error Semántico [Línea %d]: Suma inválida, ambos operandos deben ser enteros.\n", n->info->linea);
+              exit(1);
+            }
+            n->info->tipo_dato = TIPO_INT;
+            return val_izq + val_der;
+        }
             
-        case NRO: 
+        case MULT: {
+            int val_izq = evaluarAST(n->izq);
+            int val_der = evaluarAST(n->der);
+            
+            if (n->izq->info->tipo_dato != TIPO_INT || n->der->info->tipo_dato != TIPO_INT){
+              printf("Error Semántico [Línea %d]: Multiplicación inválida, ambos operandos deben ser enteros.\n", n->info->linea);
+              exit(1);
+            }
+            n->info->tipo_dato = TIPO_INT;
+            return val_izq * val_der;
+        }
+            
+        case NRO:
+            n->info->tipo_dato = TIPO_INT;
             return atoi(n->info->valor);
 
         case TRUE:
+            n->info->tipo_dato = TIPO_BOOL;
             return 1;
 
         case FALSE:
+            n->info->tipo_dato = TIPO_BOOL;
             return 0;
 
-        case AND:
-            return evaluarAST(n->izq) && evaluarAST(n->der);
+        case AND: {
+            int val_izq = evaluarAST(n->izq);
+            int val_der = evaluarAST(n->der);
+            
+            if (n->izq->info->tipo_dato != TIPO_BOOL || n->der->info->tipo_dato != TIPO_BOOL){
+              printf("Error Semántico [Línea %d]: Conjunción inválida, ambos operandos deben ser booleanos.\n", n->info->linea);
+              exit(1);
+            }
+            n->info->tipo_dato = TIPO_BOOL;
+            return val_izq && val_der;
+        }
 
-        case OR:
-            return evaluarAST(n->izq) || evaluarAST(n->der);
+        case OR: {
+            int val_izq = evaluarAST(n->izq);
+            int val_der = evaluarAST(n->der);
 
-        case NOT:
-            return !evaluarAST(n->izq);
+            if (n->izq->info->tipo_dato != TIPO_BOOL || n->der->info->tipo_dato != TIPO_BOOL){
+              printf("Error Semántico [Línea %d]: Disyunción inválida, ambos operandos deben ser booleanos.\n", n->info->linea);
+              exit(1);
+            }
+            n->info->tipo_dato = TIPO_BOOL;
+            return val_izq || val_der;
+        }
+
+        case NOT: {
+            int val = evaluarAST(n->izq);
+            
+            if (n->izq->info->tipo_dato != TIPO_BOOL){
+              printf("Error Semántico [Línea %d]: Negación inválida, el operando debe ser booleano.\n", n->info->linea);
+              exit(1);
+            }
+            n->info->tipo_dato = TIPO_BOOL;
+            return !val;
+        }
 
         case ID: {
             Simbolo *s = buscarSimbolo(n->info->valor);
             if (s == NULL) {
                 printf("Error Semántico [Línea %d]: Variable '%s' no declarada.\n", n->info->linea, n->info->valor);
-                return 0;
+                exit(1);
             }
+            n->info->tipo_dato = s->tipo;
             return s->valor;
         }
 
@@ -140,16 +188,16 @@ int evaluarAST(Nodo *n) {
             Simbolo *s = buscarSimbolo(nombre_var);
             if (s == NULL) {
                 printf("Error Semántico [Línea %d]: Asignación a variable '%s' no declarada.\n", n->info->linea, nombre_var);
-                return 0;
+                exit(1);
             }
             
             int resultado = evaluarAST(n->der);
             
-            // Opcional: chequeo de tipos para variables booleanas
-            if (s->tipo == TIPO_BOOL && (resultado != 0 && resultado != 1)) {
-                 printf("Advertencia [Línea %d]: Asignando un valor que no es boolean (1 o 0) a la variable '%s'.\n", n->info->linea, nombre_var);
+            // chequeo de tipos para variables booleanas
+            if (s->tipo != n->der->info->tipo_dato) {
+                 printf("Error Semántico [Línea %d]: Conflicto de tipos. No puedes guardar ese valor en la variable '%s'.\n", n->info->linea, nombre_var);
+                exit(1);
             }
-            
             s->valor = resultado;
             return resultado;
         }

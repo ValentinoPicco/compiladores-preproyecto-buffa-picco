@@ -1,6 +1,6 @@
 void main() {
-    bool b;
-    b = false;
+    int b;
+    b = 23 + true;
 
     return b;
 }
