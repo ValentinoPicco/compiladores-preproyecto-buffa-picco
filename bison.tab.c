@@ -1818,6 +1818,7 @@ yyreturnlab:
 
 void yyerror(const char *s) {
   fprintf(stderr, "Error en la línea %d: %s\n", yylineno, s); 
+  exit(1);
 }
 
 void imprimirAST(Nodo *n, int nivel) {

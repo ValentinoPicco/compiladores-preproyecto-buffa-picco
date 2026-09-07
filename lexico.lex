@@ -23,6 +23,7 @@ id     {letra}({letra}|{nro})*
 "false"   { return False; }
 ";"   { return ';'; }
 "+"   { return '+'; }
+"*"   { return '*'; }
 "("   { return '('; }
 ")"   { return ')'; }
 "}"   { return '}'; }

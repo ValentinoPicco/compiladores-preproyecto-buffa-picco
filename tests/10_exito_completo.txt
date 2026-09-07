@@ -1,0 +1,7 @@
+void main() {
+    int num;
+    bool isValid;
+    num = (10 + 5) * 2;
+    isValid = not (false or false);
+    return num;
+}

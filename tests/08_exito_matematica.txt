@@ -1,0 +1,7 @@
+void main() {
+    int a;
+    int b;
+    a = 5 * 2 + 10;
+    b = a * 2;
+    return b;
+}

@@ -24,7 +24,7 @@ Simbolo* buscarSimbolo(char *nombre) {
 void insertarSimbolo(char *nombre, TipoDato tipo) {
   if (buscarSimbolo(nombre) != NULL) {
     printf("Error: La variable '%s' ya está declarada.\n", nombre);
-    return;
+    exit(1);
   }
 
   Simbolo *nuevo = malloc(sizeof(Simbolo));
