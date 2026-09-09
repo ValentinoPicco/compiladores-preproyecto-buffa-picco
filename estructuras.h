@@ -37,4 +37,12 @@ typedef struct Simbolo {
 
 int evaluarAST(Nodo *n);
 
+
+
+void emitter_init(FILE *out);
+void emit(const char *fmt, ...);
+int new_label(void);
+
+void generar_pseudo(Nodo *root, const char *filename);
 #endif
+

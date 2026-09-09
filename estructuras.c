@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "estructuras.h"
-
+#include <stdarg.h> 
 #include <string.h>
 
 extern int yylineno;
@@ -214,4 +214,141 @@ int evaluarAST(Nodo *n) {
         default:
             return 0;
     }
+
+}
+
+static FILE *emitter_outf = NULL;
+static int label_counter = 0;
+
+void emitter_init(FILE *out) {
+    emitter_outf = out ? out : stdout;
+}
+
+void emit(const char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+    if (!emitter_outf) emitter_outf = stdout;
+    vfprintf(emitter_outf, fmt, ap);
+    fprintf(emitter_outf, "\n");
+    va_end(ap);
+}
+
+int new_label(void) {
+    label_counter++;
+    return label_counter;
+}
+
+static void cg_gen_expr(Nodo *n);
+static void cg_gen_stmt(Nodo *n);
+
+static void cg_gen_expr(Nodo *n) {
+    if (!n) return;
+    switch (n->info->tipo) {
+        case NRO:
+            emit("PUSH %s", n->info->valor);
+            n->info->tipo_dato = TIPO_INT;
+            break;
+        case TRUE:
+            emit("PUSH 1");
+            n->info->tipo_dato = TIPO_BOOL;
+            break;
+        case FALSE:
+            emit("PUSH 0");
+            n->info->tipo_dato = TIPO_BOOL;
+            break;
+        case ID:
+            emit("LOAD %s", n->info->valor);
+            // tipo lo rellena la tabla de símbolos si corresponde
+            break;
+        case SUMA:
+            cg_gen_expr(n->izq);
+            cg_gen_expr(n->der);
+            emit("ADD");
+            n->info->tipo_dato = TIPO_INT;
+            break;
+        case MULT:
+            cg_gen_expr(n->izq);
+            cg_gen_expr(n->der);
+            emit("MUL");
+            n->info->tipo_dato = TIPO_INT;
+            break;
+        case AND:
+            cg_gen_expr(n->izq);
+            cg_gen_expr(n->der);
+            emit("AND");
+            n->info->tipo_dato = TIPO_BOOL;
+            break;
+        case OR:
+            cg_gen_expr(n->izq);
+            cg_gen_expr(n->der);
+            emit("OR");
+            n->info->tipo_dato = TIPO_BOOL;
+            break;
+        case NOT:
+            cg_gen_expr(n->izq);
+            emit("NOT");
+            n->info->tipo_dato = TIPO_BOOL;
+            break;
+        case ASIG:
+            // izquierda es ID
+            cg_gen_expr(n->der);
+            emit("STORE %s", n->izq->info->valor);
+            n->info->tipo_dato = n->der->info->tipo_dato;
+            break;
+        default:
+            // si llega algo inesperado, intenta tratarlo como statement
+            cg_gen_stmt(n);
+            break;
+    }
+}
+
+static void cg_gen_stmt(Nodo *n) {
+    if (!n) return;
+    switch (n->info->tipo) {
+        case S:
+            // listas de statements: recorrer izq y der
+            if (n->izq) cg_gen_stmt(n->izq);
+            if (n->der) cg_gen_stmt(n->der);
+            break;
+        case D:
+            // declaraciones: no emitir código (la tabla de símbolos ya debe existir)
+            if (n->izq) cg_gen_stmt(n->izq);
+            if (n->der) cg_gen_stmt(n->der);
+            break;
+        case DECL:
+            // nada que emitir aquí
+            break;
+        case RETURN:
+            if (n->izq) {
+                cg_gen_expr(n->izq);
+            } else {
+                emit("PUSH 0");
+            }
+            emit("PRINT"); // para este ejemplo imprimimos el valor retornado
+            emit("END");
+            break;
+        case BLOQUE:
+        case PROG:
+            if (n->izq) cg_gen_stmt(n->izq);
+            if (n->der) cg_gen_stmt(n->der);
+            break;
+        default:
+            // expr-statement (E ';') llega como E en S
+            cg_gen_expr(n);
+            break;
+    }
+}
+
+void generar_pseudo(Nodo *root, const char *filename) {
+    FILE *f = fopen(filename, "w");
+    if (!f) {
+        perror("fopen generar_pseudo");
+        return;
+    }
+    emitter_init(f);
+    emit("; pseudo-assembly generado");
+    cg_gen_stmt(root);
+    emit("END");
+    fclose(f);
+    
 }

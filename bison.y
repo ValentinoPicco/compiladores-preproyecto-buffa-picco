@@ -227,6 +227,9 @@ void main(int argc, char** argv) {
 
   printf("\n--- Ejecutando el programa ---\n");
   evaluarAST(raiz);
+
+  printf("\n--- Generando PseudoAsemmbly ---\n");
+  generar_pseudo(raiz, "pseudoassembly.txt");
 }
 
 int yywrap(void) {
