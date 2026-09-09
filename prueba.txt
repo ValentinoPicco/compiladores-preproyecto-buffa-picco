@@ -1,6 +1,6 @@
 void main() {
     int b;
-    b = 23 + true;
+    b = 23 + 3;
 
     return b;
 }

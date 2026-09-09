@@ -244,16 +244,16 @@ int new_label(void) {
     return label_counter;
 }
 
-static void cg_gen_expr(Nodo *n);
+static int cg_gen_expr(Nodo *n);
 static void cg_gen_stmt(Nodo *n);
 
-// genera lineas de pseudo assembly a partir de los nodos del AST
-static void cg_gen_expr(Nodo *n) {
+
+static int cg_gen_expr(Nodo *n) {
     if (!n) return -1;
     switch (n->info->tipo) {
         case NRO: {
             int temp = new_label();
-            emit("t%d %s", temp, n->info->valor);
+            emit("t%d = %s", temp, n->info->valor);
             return temp;
         }
         case TRUE: {
@@ -263,25 +263,25 @@ static void cg_gen_expr(Nodo *n) {
         }
         case FALSE: {
             int temp = new_label();
-            emit("t% = 0", temp);
+            emit("t%d = 0", temp);
             return temp;
         }
         case ID: {
             int temp = new_label();
-            emit("t%d %s", temp, n->info->valor);
+            emit("t%d = %s", temp, n->info->valor);
             return temp;
         }
         case SUMA: {
             int izq = cg_gen_expr(n->izq);
             int der = cg_gen_expr(n->der);
-            int temp new_label();
+            int temp = new_label();
             emit("t%d = t%d + t%d", temp, izq, der);
             return temp;
         }
         case MULT: {
             int izq = cg_gen_expr(n->izq);
             int der = cg_gen_expr(n->der);
-            int temp new_label();
+            int temp = new_label();
             emit("t%d = t%d * t%d", temp, izq, der);
             return temp;
         }
@@ -321,16 +321,17 @@ static void cg_gen_stmt(Nodo *n) {
     if (!n) return;
     switch (n->info->tipo) {
         case S:
-            // listas de statements: recorrer izq y der
             if (n->izq) cg_gen_stmt(n->izq);
             if (n->der) cg_gen_stmt(n->der);
             break;
         case D:
-            // declaraciones: no emitir código (la tabla de símbolos ya debe existir)
             if (n->izq) cg_gen_stmt(n->izq);
             if (n->der) cg_gen_stmt(n->der);
             break;
         case DECL:
+        case VOID:
+        case INT:
+        case BOOL:
             // nada que emitir aquí
             break;
         case RETURN:
@@ -340,7 +341,6 @@ static void cg_gen_stmt(Nodo *n) {
             } else {
                 emit("RETURN 0");
             }
-            emit("END");
             break;
         case BLOQUE:
         case PROG:
@@ -348,7 +348,6 @@ static void cg_gen_stmt(Nodo *n) {
             if (n->der) cg_gen_stmt(n->der);
             break;
         default:
-            // expr-statement (E ';') llega como E en S
             cg_gen_expr(n);
             break;
     }

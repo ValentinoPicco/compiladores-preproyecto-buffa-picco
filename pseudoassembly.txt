@@ -1,0 +1,14 @@
+; pseudo-assembly generado
+t1 = 2
+t2 = 3
+t3 = t1 + t2
+t4 = 4
+t5 = t3 * t4
+t6 = 5
+t7 = t5 + t6
+t8 = 2
+t9 = t7 * t8
+result = t9
+t10 = result
+RETURN t10
+END
