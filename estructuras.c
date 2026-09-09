@@ -249,63 +249,70 @@ static void cg_gen_stmt(Nodo *n);
 
 // genera lineas de pseudo assembly a partir de los nodos del AST
 static void cg_gen_expr(Nodo *n) {
-    if (!n) return;
+    if (!n) return -1;
     switch (n->info->tipo) {
-        case NRO:
-            emit("PUSH %s", n->info->valor);
-            n->info->tipo_dato = TIPO_INT;
-            break;
-        case TRUE:
-            emit("PUSH 1");
-            n->info->tipo_dato = TIPO_BOOL;
-            break;
-        case FALSE:
-            emit("PUSH 0");
-            n->info->tipo_dato = TIPO_BOOL;
-            break;
-        case ID:
-            emit("LOAD %s", n->info->valor);
-            // tipo lo rellena la tabla de símbolos si corresponde
-            break;
-        case SUMA:
-            cg_gen_expr(n->izq);
-            cg_gen_expr(n->der);
-            emit("ADD");
-            n->info->tipo_dato = TIPO_INT;
-            break;
-        case MULT:
-            cg_gen_expr(n->izq);
-            cg_gen_expr(n->der);
-            emit("MUL");
-            n->info->tipo_dato = TIPO_INT;
-            break;
-        case AND:
-            cg_gen_expr(n->izq);
-            cg_gen_expr(n->der);
-            emit("AND");
-            n->info->tipo_dato = TIPO_BOOL;
-            break;
-        case OR:
-            cg_gen_expr(n->izq);
-            cg_gen_expr(n->der);
-            emit("OR");
-            n->info->tipo_dato = TIPO_BOOL;
-            break;
-        case NOT:
-            cg_gen_expr(n->izq);
-            emit("NOT");
-            n->info->tipo_dato = TIPO_BOOL;
-            break;
-        case ASIG:
-            // izquierda es ID
-            cg_gen_expr(n->der);
-            emit("STORE %s", n->izq->info->valor);
-            n->info->tipo_dato = n->der->info->tipo_dato;
-            break;
+        case NRO: {
+            int temp = new_label();
+            emit("t%d %s", temp, n->info->valor);
+            return temp;
+        }
+        case TRUE: {
+            int temp = new_label();
+            emit("t%d = 1", temp);
+            return temp;
+        }
+        case FALSE: {
+            int temp = new_label();
+            emit("t% = 0", temp);
+            return temp;
+        }
+        case ID: {
+            int temp = new_label();
+            emit("t%d %s", temp, n->info->valor);
+            return temp;
+        }
+        case SUMA: {
+            int izq = cg_gen_expr(n->izq);
+            int der = cg_gen_expr(n->der);
+            int temp new_label();
+            emit("t%d = t%d + t%d", temp, izq, der);
+            return temp;
+        }
+        case MULT: {
+            int izq = cg_gen_expr(n->izq);
+            int der = cg_gen_expr(n->der);
+            int temp new_label();
+            emit("t%d = t%d * t%d", temp, izq, der);
+            return temp;
+        }
+        case AND: {
+            int izq = cg_gen_expr(n->izq);
+            int der = cg_gen_expr(n->der);
+            int temp = new_label();
+            emit("t%d = t%d AND t%d", temp, izq, der);
+            return temp;
+        }
+        case OR:{
+            int izq = cg_gen_expr(n->izq);
+            int der = cg_gen_expr(n->der);
+            int temp = new_label();
+            emit("t%d = t%d OR t%d", temp, izq, der);
+            return temp;
+        }
+        case NOT: {
+            int izq = cg_gen_expr(n->izq);
+            int temp = new_label();
+            emit("t%d = NOT t%d", temp, izq);
+            return temp;
+        }
+        case ASIG: {
+            int der = cg_gen_expr(n->der);
+            emit("%s = t%d", n->izq->info->valor, der);
+            return der;
+        }
         default:
-            // si llega algo inesperado, intenta tratarlo como statement
             cg_gen_stmt(n);
-            break;
+            return -1;
     }
 }
 
@@ -328,11 +335,11 @@ static void cg_gen_stmt(Nodo *n) {
             break;
         case RETURN:
             if (n->izq) {
-                cg_gen_expr(n->izq);
+                int temp = cg_gen_expr(n->izq);
+                emit("RETURN t%d", temp);
             } else {
-                emit("PUSH 0");
+                emit("RETURN 0");
             }
-            emit("PRINT"); // para este ejemplo imprimimos el valor retornado
             emit("END");
             break;
         case BLOQUE:
