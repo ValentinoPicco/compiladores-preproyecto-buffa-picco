@@ -247,7 +247,7 @@ int new_label(void) {
 static void cg_gen_expr(Nodo *n);
 static void cg_gen_stmt(Nodo *n);
 
-
+// genera lineas de pseudo assembly a partir de los nodos del AST
 static void cg_gen_expr(Nodo *n) {
     if (!n) return;
     switch (n->info->tipo) {
@@ -309,6 +309,7 @@ static void cg_gen_expr(Nodo *n) {
     }
 }
 
+// funcion auxiliar que trata los statements y declaraciones
 static void cg_gen_stmt(Nodo *n) {
     if (!n) return;
     switch (n->info->tipo) {
@@ -346,6 +347,7 @@ static void cg_gen_stmt(Nodo *n) {
     }
 }
 
+// función principal de generación de assembly
 void generar_pseudo(Nodo *root, const char *filename) {
     FILE *f = fopen(filename, "w");
     if (!f) {
