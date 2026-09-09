@@ -15,6 +15,7 @@ Nodo *raiz = NULL;
     struct Nodo *nodo;
     char *texto;
 }
+/* gramática del lenguaje */
 
 %define parse.error verbose
 %type <nodo> P E RET TRET TVAR DEC D S
@@ -195,6 +196,7 @@ void yyerror(const char *s) {
   fprintf(stderr, "Error en la línea %d: %s\n", yylineno, s); 
   exit(1);
 }
+
 
 void imprimirAST(Nodo *n, int nivel) {
     if (n == NULL) return;

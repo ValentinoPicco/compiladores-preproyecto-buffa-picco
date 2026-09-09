@@ -8,6 +8,8 @@ extern int yylineno;
 
 Simbolo *cabezaTabla = NULL;
 
+// busca un símbolo en la tabla
+
 Simbolo* buscarSimbolo(char *nombre) {
   Simbolo *actual = cabezaTabla;
 
@@ -20,7 +22,7 @@ Simbolo* buscarSimbolo(char *nombre) {
 
   return NULL;
 }
-
+// guarda un nuevo símbolo en la tabla, si no existe previamente
 void insertarSimbolo(char *nombre, TipoDato tipo) {
   if (buscarSimbolo(nombre) != NULL) {
     printf("Error: La variable '%s' ya está declarada.\n", nombre);
@@ -36,6 +38,7 @@ void insertarSimbolo(char *nombre, TipoDato tipo) {
   cabezaTabla = nuevo;
 }
 
+// crear un nuevo nodo para el AST
 Nodo *crearNodo(TipoNodo tipo, char *valor, Nodo *izq, Nodo *der)
 {
     Nodo *n = malloc(sizeof(Nodo));
@@ -81,6 +84,7 @@ const char* tipoToString(TipoNodo t) {
     }
 }
 
+// Evalua el AST y realiza la ejecución semántica (intérprete)
 int evaluarAST(Nodo *n) {
     if (n == NULL) return 0;
 
@@ -217,6 +221,7 @@ int evaluarAST(Nodo *n) {
 
 }
 
+// parte de generación de pseudo assembly
 static FILE *emitter_outf = NULL;
 static int label_counter = 0;
 
@@ -224,6 +229,7 @@ void emitter_init(FILE *out) {
     emitter_outf = out ? out : stdout;
 }
 
+// genera una línea de texto en el archivo de salida
 void emit(const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
@@ -240,6 +246,7 @@ int new_label(void) {
 
 static void cg_gen_expr(Nodo *n);
 static void cg_gen_stmt(Nodo *n);
+
 
 static void cg_gen_expr(Nodo *n) {
     if (!n) return;
