@@ -1,0 +1,5 @@
+void main() {
+    int result;
+    result = (((2 + 3) * 4) + 5) * 2;
+    return result;
+}

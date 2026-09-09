@@ -11,7 +11,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Compilación exitosa. Ejecutando tests..."
+echo "Compilacion exitosa. Ejecutando tests..."
 echo ""
 
 pasados=0
@@ -22,24 +22,31 @@ for file in tests/*.txt; do
     echo "=========================================================="
     echo "TEST: $file"
     echo "----------------------------------------------------------"
-    echo "RESULTADO:"
+    
+    rm -f pseudoassembly.txt
+    
     ./prueba "$file"
     exit_code=$?
     
-    echo "----------------------------------------------------------"
-    if [[ "$file" == *"exito"* ]]; then
+    if [[ "$file" == *"exito"* || "$file" == *"cg_"* ]]; then
         if [ $exit_code -eq 0 ]; then
-            echo "TEST SUPERADO"
+            echo "----------------------------------------------------------"
+            echo "TEST PASADO"
             pasados=$((pasados+1))
+            echo "PseudoAssembly Generado (pseudoassembly.txt):"
+            sed 's/^/   | /' pseudoassembly.txt
         else
-            echo "TEST FALLIDO (El compilador arrojó error y se esperaba éxito)"
+            echo "----------------------------------------------------------"
+            echo "TEST FALLIDO (El compilador arrojo error y se esperaba exito)"
         fi
     else
         if [ $exit_code -ne 0 ]; then
-            echo "TEST SUPERADO (Atrapó el error correctamente)"
+            echo "----------------------------------------------------------"
+            echo "TEST PASADO (Atrapo el error correctamente)"
             pasados=$((pasados+1))
         else
-            echo "TEST FALLIDO (El compilador compiló con éxito algo que estaba mal)"
+            echo "----------------------------------------------------------"
+            echo "TEST FALLIDO (El compilador compilo con exito algo que estaba mal)"
         fi
     fi
     echo ""

@@ -1,0 +1,7 @@
+void main() {
+    int x;
+    bool y;
+    x = 99;
+    y = true;
+    return x;
+}
